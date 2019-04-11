@@ -47,9 +47,7 @@ class SquareGrid:
             rect = pg.Rect(wall * self.TILESIZE, (self.TILESIZE, self.TILESIZE))
             pg.draw.rect(self.screen, self.LIGHTGRAY, rect)
     
-    def vec2int(v):
-        return (int(v.x), int(v.y))
-
+    
     def draw_grid(self):
         for x in range(0, self.WIDTH, self.TILESIZE):
             pg.draw.line(self.screen, self.LIGHTGRAY, (x, 0), (x, self.HEIGHT))
