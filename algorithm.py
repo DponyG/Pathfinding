@@ -24,16 +24,23 @@ class Algorithms:
         self.start = start
         self.end = end
         self.weights = {}
+        self.shortestPath = [] # might not be the shortest path depending on your algorithm
+
+    def getShortestPath(self):
+        return self.shortestPath
 
     def distance(self, from_node, to_node):
         return vec(from_node).distance_to(vec(to_node))
     
-    def printPath(self, parent, j):
+    def setShortestPath(self, parent, j):
 
         if parent[j] == -1:
             return
+        
+        self.shortestPath.append(vec(parent[j]))
+        self.setShortestPath(parent, parent[j])
 
-        self.printPath(parent, parent[j]
+        
       
     # credit goes to https://www.youtube.com/watch?v=e3gbNOl4DiM&t=6s
     
@@ -64,6 +71,8 @@ class Algorithms:
                         priority = next_cost
                         frontier.put(next, priority)
                         path[next] = vec(current) - vec(next)
+
+        self.setShortestPath(parent, self.graph.vec2int(self.end))
         return path
 
     def DFS(self):
