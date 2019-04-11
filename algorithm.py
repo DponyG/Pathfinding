@@ -94,7 +94,7 @@ class Algorithms:
                 currentPath.append(newPos)
                 visited.append(newPos)
                 currentOptions = self.getUnvisted(current,visited)
-                
+        self.shortestPath = currentPath
         return path
 
     def getUnvisted(self,current,visited):

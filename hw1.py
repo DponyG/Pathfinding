@@ -1,4 +1,4 @@
-
+import re
 import pygame as pg
 from os import path
 from variables import *
@@ -19,19 +19,19 @@ RED = (255,0,0)
 BLUE = (0,0,255)
 
 pg.init()
-screen = pg.display.set_mode((WIDTH, HEIGHT))
 clock = pg.time.Clock()
-
-FPS = 30
+screen = pg.display.set_mode((WIDTH, HEIGHT))
 g = SquareGrid(GRIDWIDTH, GRIDHEIGHT, screen, WIDTH, HEIGHT)
+FPS = 30
+
 
 ## Will be parsed by a file parser
 walls = [(10, 7), (11, 7), (12, 7), (13, 7), (14, 7), (15, 7), (16, 7), (7, 7), (6, 7), (5, 7), (5, 5), (5, 6), (1, 6), (2, 6), (3, 6), (5, 10), (5, 11), (5, 12), (5, 9), (5, 8), (12, 8), (12, 9), (12, 10), (12, 11), (15, 14), (15, 13), (15, 12), (15, 11), (15, 10), (17, 7), (18, 7), (21, 7), (21, 6), (21, 5), (21, 4), (9, 2), (9, 1), (7, 3), (8, 3), (10, 3), (9, 3), (11, 3), (2, 5), (2, 4), (2, 3), (2, 2), (2, 0), (2, 1), (0, 11), (1, 11), (2, 11), (21, 2), (20, 11), (20, 12), (23, 13), (23, 14), (24, 10), (25, 10), (6, 12), (7, 12), (10, 12), (11, 12), (12, 12), (5, 3), (6, 3), (5, 4)]
 for wall in walls:
     g.walls.append(vec(wall))
 
-goal = vec(, 4)
-start = vec(20, 0)
+goal = vec(1, 1)
+start = vec(1, 3)
 
 
 
@@ -41,8 +41,9 @@ def main():
     path = {}
     findPath = False
     running = True
-    filename = "test"
-    start,goal = parseFile(filename)
+    filename = "test2"
+    parseFile(filename)
+    print(start)
     while running:
         clock.tick(FPS)
         for event in pg.event.get():
@@ -55,12 +56,12 @@ def main():
 
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_d:
-                    d = Algorithms(g, goal, start )
+                    d = Algorithms(g, start, goal )
                     path = d.dijkstras()
                     findPath = True
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_s:
-                    d = Algorithms(g, goal, start)
+                    d = Algorithms(g, start, goal)
                     path = d.DFS()
                     findPath = True
                    
@@ -101,15 +102,23 @@ def main():
         pg.display.flip()
 
 def parseFile(filename):
+    global GRIDWIDTH,GRIDHEIGHT
+    global g,screen,WIDTH,HEIGHT
+    
     fh = open(filename, "r")
     counter = 0
     walls = []
-    g.walls = []
     x = 0
-    y = 0
+    y = -1
     for line in fh:
         if counter == 0:
-            sizeData = line
+            garbage,parms = int, re.findall(r'\d+', line)
+            GRIDWIDTH = int(parms[0])
+            GRIDHEIGHT = int(parms[1])
+            WIDTH = TILESIZE*GRIDWIDTH
+            HEIGHT = TILESIZE*GRIDHEIGHT
+            g = SquareGrid(GRIDWIDTH, GRIDHEIGHT, screen, WIDTH, HEIGHT)
+            screen = pg.display.set_mode((WIDTH, HEIGHT))
             counter += 1
         else:
             for char in line:
@@ -117,13 +126,16 @@ def parseFile(filename):
                     walls.append((x,y))
                     g.walls.append(vec(x,y))
                 elif char == 'S':
+                    global start 
                     start = vec(x,y)
                 elif char == 'E':
+                    global goal 
                     goal = vec(x,y)
                 x += 1
             x = 0
         y += 1
     fh.close()
+    
     return start,goal
 
 if __name__ == '__main__':
