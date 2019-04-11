@@ -27,32 +27,43 @@ class Algorithms:
 
     def distance(self, from_node, to_node):
         return vec(from_node).distance_to(vec(to_node))
+    
+    def printPath(self, parent, j):
 
+        if parent[j] == -1:
+            return
 
-    def vec2int(self,v):
-        return (int(v.x), int(v.y))
+        self.printPath(parent, parent[j]
+      
+    # credit goes to https://www.youtube.com/watch?v=e3gbNOl4DiM&t=6s
     
     def dijkstras(self):
-    
         path = {}
         cost = {}
         frontier = PriorityQueue()
-        frontier.put(self.vec2int(self.start), 0)
-        path[self.vec2int(self.start)] = None
-        cost[self.vec2int(self.start)] = 0
+        frontier.put(self.graph.vec2int(self.start), 0)
+        path[self.graph.vec2int(self.start)] = None
+        cost[self.graph.vec2int(self.start)] = 0
+        parent = {} ## a dictionary that will hold shortest path
+        parent[self.graph.vec2int(self.start)] = -1
         
         while not frontier.empty():
-            self.current = frontier.get() ## pop the first item off the queue
-            if self.current == self.end:
+            minDistance = 1000
+            current = frontier.get() ## pop the first item off the queue
+            if current == self.end:
                 break
-            for next in self.graph.find_neighbors(vec(self.current)):
-                next = self.vec2int(next)
-                next_cost = cost[self.current] + self.distance(self.current, self.end)
+            for next in self.graph.find_neighbors(vec(current)):
+                next = self.graph.vec2int(next)
+                next_cost = cost[current] + self.distance(next, self.end)
+    
                 if next not in cost or next_cost < cost[next]:
-                    cost[next] = next_cost
-                    priority = next_cost
-                    frontier.put(next, priority)
-                    path[next] = vec(self.current) - vec(next)
+                    if next_cost < minDistance:
+                        minDistance = next_cost
+                        parent[next] = current
+                        cost[next] = next_cost
+                        priority = next_cost
+                        frontier.put(next, priority)
+                        path[next] = vec(current) - vec(next)
         return path
 
     def DFS(self):
@@ -68,7 +79,7 @@ class Algorithms:
                 currentOptions = self.getUnvisted(current,visited)
             else:
                 newPos = currentOptions.pop(len(currentOptions) -1)
-                intNewPos = self.vec2int(newPos)
+                intNewPos = self.graph.vec2int(newPos)
                 path[intNewPos] = vec(current) - vec(intNewPos)
                 current = newPos
                 currentPath.append(newPos)
@@ -90,6 +101,8 @@ class Algorithms:
         return unvisited
         
         
+
+
 
 
 
