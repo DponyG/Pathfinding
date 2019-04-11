@@ -41,6 +41,7 @@ def vec2int(v):
 
 def main():
     path = {}
+    findPath = False
     running = True
     while running:
         clock.tick(FPS)
@@ -54,8 +55,9 @@ def main():
 
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_d:
-                    d = Algorithms(g, start, goal)
+                    d = Algorithms(g, goal, start)
                     path = d.dijkstras()
+                    findPath = True
                    
         screen.fill(DARKGRAY)
                    
@@ -68,13 +70,15 @@ def main():
         g.draw_grid()
         g.draw_wall()
 
-        # current = start + path[vec2int(start)]
-        # while current != goal:
-        #     x = current.x * TILESIZE
-        #     y = current.y * TILESIZE
-        #     rect = pg.Rect(x, y, TILESIZE, TILESIZE)
-        #     pg.draw.rect(screen, CYAN, rect)
-        #     current = current + path[vec2int(current)]
+
+        if(findPath == True):
+            current = start + path[vec2int(start)]
+            while current != goal:
+                x = current.x * TILESIZE
+                y = current.y * TILESIZE
+                rect = pg.Rect(x, y, TILESIZE, TILESIZE)
+                pg.draw.rect(screen, CYAN, rect)
+                current = current + path[vec2int(current)]
         
         home = pg.Rect(start.x*TILESIZE, start.y*TILESIZE, TILESIZE, TILESIZE)
         pg.draw.rect(screen, BLUE, home)

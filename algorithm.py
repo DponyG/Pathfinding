@@ -33,6 +33,7 @@ class Algorithms:
         return (int(v.x), int(v.y))
         
     def dijkstras(self):
+    
         path = {}
         cost = {}
         frontier = PriorityQueue()
