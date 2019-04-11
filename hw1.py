@@ -30,8 +30,8 @@ walls = [(10, 7), (11, 7), (12, 7), (13, 7), (14, 7), (15, 7), (16, 7), (7, 7), 
 for wall in walls:
     g.walls.append(vec(wall))
 
-goal = vec(20, 0)
-start = vec(6, 9)
+goal = vec(, 4)
+start = vec(20, 0)
 
 
 
@@ -77,14 +77,20 @@ def main():
 
 
         if(findPath == True):
-            current = start + path[g.vec2int(start)]
-
-            while current != goal:
-                x = current.x * TILESIZE
-                y = current.y * TILESIZE
+            for node in d.getShortestPath():
+                x = node.x * TILESIZE
+                y = node.y * TILESIZE
                 rect = pg.Rect(x, y, TILESIZE, TILESIZE)
                 pg.draw.rect(screen, CYAN, rect)
-                current = current + path[g.vec2int(current)]
+
+            # current = start + path[g.vec2int(start)]
+
+            # while current != goal:
+            #     x = current.x * TILESIZE
+            #     y = current.y * TILESIZE
+            #     rect = pg.Rect(x, y, TILESIZE, TILESIZE)
+            #     pg.draw.rect(screen, CYAN, rect)
+            #     current = current + path[g.vec2int(current)]
         
         home = pg.Rect(start.x*TILESIZE, start.y*TILESIZE, TILESIZE, TILESIZE)
         pg.draw.rect(screen, BLUE, home)
