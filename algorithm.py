@@ -29,14 +29,10 @@ class Algorithms:
         return vec(from_node).distance_to(vec(to_node))
     
     def printPath(self, parent, j):
-
         if parent[j] == -1:
             return
+        self.printPath(parent, parent[j])
 
-        self.printPath(parent, parent[j]
-      
-    # credit goes to https://www.youtube.com/watch?v=e3gbNOl4DiM&t=6s
-    
     def dijkstras(self):
         path = {}
         cost = {}

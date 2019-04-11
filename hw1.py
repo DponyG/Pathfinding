@@ -41,6 +41,8 @@ def main():
     path = {}
     findPath = False
     running = True
+    filename = "test"
+    start,goal = parseFile(filename)
     while running:
         clock.tick(FPS)
         for event in pg.event.get():
@@ -92,7 +94,31 @@ def main():
         
         pg.display.flip()
 
-
+def parseFile(filename):
+    fh = open(filename, "r")
+    counter = 0
+    walls = []
+    g.walls = []
+    x = 0
+    y = 0
+    for line in fh:
+        if counter == 0:
+            sizeData = line
+            counter += 1
+        else:
+            for char in line:
+                if char =='#':
+                    walls.append((x,y))
+                    g.walls.append(vec(x,y))
+                elif char == 'S':
+                    start = vec(x,y)
+                elif char == 'E':
+                    goal = vec(x,y)
+                x += 1
+            x = 0
+        y += 1
+    fh.close()
+    return start,goal
 
 if __name__ == '__main__':
     main()
