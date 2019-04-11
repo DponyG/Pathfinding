@@ -5,12 +5,18 @@ from variables import *
 from grid import SquareGrid
 from algorithm import Algorithms
 
+vec = pg.math.Vector2
+
 TILESIZE = 48
 GRIDWIDTH = 28
 GRIDHEIGHT = 15
 WIDTH = TILESIZE*GRIDWIDTH
 HEIGHT= TILESIZE*GRIDHEIGHT
 DARKGRAY = (40, 40, 40)
+MEDGRAY = (75, 75, 75)
+CYAN = (0, 255, 255)
+RED = (255,0,0)
+BLUE = (0,0,255)
 
 pg.init()
 screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -24,11 +30,17 @@ walls = [(10, 7), (11, 7), (12, 7), (13, 7), (14, 7), (15, 7), (16, 7), (7, 7), 
 for wall in walls:
     g.walls.append(vec(wall))
 
-start = vec(14, 8)
-end = vec(30, 8)
+goal = vec(8, 8)
+start = vec(15, 9)
 
+
+
+## needed to display shortest path
+def vec2int(v):
+    return (int(v.x), int(v.y))
 
 def main():
+    path = {}
     running = True
     while running:
         clock.tick(FPS)
@@ -39,15 +51,40 @@ def main():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     running = False
+
+            if event.type == pg.KEYDOWN:
                 if event.key == pg.K_d:
-                    d = Algorithms(g,start,end)
+                    d = Algorithms(g, start, goal)
                     path = d.dijkstras()
+                   
+        screen.fill(DARKGRAY)
+                   
+        for node in path:
+            x, y = node
+            rect = pg.Rect(x*TILESIZE, y*TILESIZE, TILESIZE, TILESIZE)
+            pg.draw.rect(screen, MEDGRAY, rect)
                      
         pg.display.set_caption("{:.2f}".format(clock.get_fps()))
-        screen.fill(DARKGRAY)
         g.draw_grid()
         g.draw_wall()
+
+        # current = start + path[vec2int(start)]
+        # while current != goal:
+        #     x = current.x * TILESIZE
+        #     y = current.y * TILESIZE
+        #     rect = pg.Rect(x, y, TILESIZE, TILESIZE)
+        #     pg.draw.rect(screen, CYAN, rect)
+        #     current = current + path[vec2int(current)]
+        
+        home = pg.Rect(start.x*TILESIZE, start.y*TILESIZE, TILESIZE, TILESIZE)
+        pg.draw.rect(screen, BLUE, home)
+
+        end = pg.Rect(goal.x*TILESIZE, goal.y*TILESIZE, TILESIZE, TILESIZE)
+        pg.draw.rect(screen, RED, end)
+        
         pg.display.flip()
+
+
 
 if __name__ == '__main__':
     main()

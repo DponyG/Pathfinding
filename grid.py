@@ -46,6 +46,10 @@ class SquareGrid:
         for wall in self.walls:
             rect = pg.Rect(wall * self.TILESIZE, (self.TILESIZE, self.TILESIZE))
             pg.draw.rect(self.screen, self.LIGHTGRAY, rect)
+
+    ## needed to display shortest path
+    def vec2int(self, v):
+        return (int(v.x), int(v.y))
     
     
     def draw_grid(self):
