@@ -41,6 +41,7 @@ def main():
                     running = False
                 if event.key == pg.K_d:
                     d = Algorithms(g,start,end)
+                    path = d.dijkstras()
                      
         pg.display.set_caption("{:.2f}".format(clock.get_fps()))
         screen.fill(DARKGRAY)

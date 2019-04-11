@@ -33,7 +33,7 @@ class Algorithms:
         return (int(v.x), int(v.y))
         
 
-    def dijkstras():
+    def dijkstras(self):
         frontier = PriorityQueue()
         frontier.put[(vec2int(start))] = None
         cost[vec2int(start)] = 0
