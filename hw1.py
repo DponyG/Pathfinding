@@ -3,6 +3,7 @@ import pygame as pg
 from os import path
 from variables import *
 from grid import SquareGrid
+from algorithm import Algorithms
 
 TILESIZE = 48
 GRIDWIDTH = 28
@@ -24,7 +25,7 @@ for wall in walls:
     g.walls.append(vec(wall))
 
 start = vec(14, 8)
-
+end = vec(30, 8)
 
 
 def main():
@@ -34,7 +35,13 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
-
+            
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    running = False
+                if event.key == pg.K_d:
+                    d = Algorithms(g,start,end)
+                     
         pg.display.set_caption("{:.2f}".format(clock.get_fps()))
         screen.fill(DARKGRAY)
         g.draw_grid()
