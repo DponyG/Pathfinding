@@ -58,6 +58,11 @@ def main():
                     d = Algorithms(g, goal, start)
                     path = d.dijkstras()
                     findPath = True
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_s:
+                    d = Algorithms(g, goal, start)
+                    path = d.DFS()
+                    findPath = True
                    
         screen.fill(DARKGRAY)
                    

@@ -31,7 +31,7 @@ class Algorithms:
 
     def vec2int(self,v):
         return (int(v.x), int(v.y))
-        
+    
     def dijkstras(self):
     
         path = {}
@@ -55,7 +55,41 @@ class Algorithms:
                     path[next] = vec(self.current) - vec(next)
         return path
 
+    def DFS(self):
+        visited = []
+        currentOptions = [self.start]
+        currentPath = []
+        path = {}
+        current = 0
+        while current != self.end:
+            if not currentOptions:
+                currentPath.pop(len(currentPath) - 1)
+                current = currentPath[len(currentPath) -1]
+                currentOptions = self.getUnvisted(current,visited)
+            else:
+                newPos = currentOptions.pop(len(currentOptions) -1)
+                intNewPos = self.vec2int(newPos)
+                path[intNewPos] = vec(current) - vec(intNewPos)
+                current = newPos
+                currentPath.append(newPos)
+                visited.append(newPos)
+                currentOptions = self.getUnvisted(current,visited)
+                
+        return path
 
+    def getUnvisted(self,current,visited):
+        unvisited = []
+        for next in self.graph.find_neighbors(vec(current)):
+            beenVisited = 0
+            for vis in visited:
+                if vis == next:
+                    beenVisited = 1
+                    break
+            if beenVisited == 0:
+                unvisited.append(next)
+        return unvisited
+        
+        
 
 
 
