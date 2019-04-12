@@ -149,7 +149,7 @@ class Algorithms:
             current = search_queue.get()
             if current == self.end:
                 return_path = self.get_return_path(path, current)
-                print(f"BFS path with length {len(return_path)}: {return_path}")
+                print("BFS path with length {len(return_path)}: {return_path}")
                 break
             else:
                 neighbors = graph.find_neighbors(current)

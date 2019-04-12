@@ -43,8 +43,11 @@ def main():
     running = True
     filename = "test2"
     parseFile(filename)
-    print(start)
     algorithms = Algorithms(g, start, goal)
+                       
+    screen.fill(DARKGRAY)
+    g.draw_grid()
+    g.draw_wall()
     while running:
         clock.tick(FPS)
         for event in pg.event.get():
@@ -55,37 +58,53 @@ def main():
                 if event.key == pg.K_ESCAPE:
                     running = False
                 if event.key == pg.K_d:
+                    print("Dijkstras")
+                    screen.fill(DARKGRAY)
+                    g.draw_grid()
+                    g.draw_wall()
                     path = algorithms.dijkstras()
                     findPath = True
                 if event.key == pg.K_s:
+                    print("DFS")
+                    screen.fill(DARKGRAY)
+                    g.draw_grid()
+                    g.draw_wall()
                     path = algorithms.DFS()
                     findPath = True
                 if event.key == pg.K_f:
+                    print("BFS")
+                    screen.fill(DARKGRAY)
+                    g.draw_grid()
+                    g.draw_wall()
                     path = algorithms.BFS()
                     findPath = True
                 if event.key == pg.K_a:
+                    print("ASTAR")
+                    screen.fill(DARKGRAY)
+                    g.draw_grid()
+                    g.draw_wall()
                     path = algorithms.a_star_search()
                     findPath = True
-                   
-        screen.fill(DARKGRAY)
-                   
-        for node in path:
-            x, y = node
-            rect = pg.Rect(x*TILESIZE, y*TILESIZE, TILESIZE, TILESIZE)
-            pg.draw.rect(screen, MEDGRAY, rect)
-                     
-        pg.display.set_caption("{:.2f}".format(clock.get_fps()))
-        g.draw_grid()
-        g.draw_wall()
 
+        pg.display.set_caption("{:.2f}".format(clock.get_fps()))
 
         if(findPath == True):
+            
+            counter = 0
+            for node in path:
+                x, y = node
+                rect = pg.Rect(x*TILESIZE, y*TILESIZE, TILESIZE, TILESIZE)
+                pg.draw.rect(screen, MEDGRAY, rect)
+                counter += 1
+            print("Nodes Searched: "+ str(counter))
+            counter = 0
             for node in algorithms.getShortestPath():
+                counter += 1
                 x = node.x * TILESIZE
                 y = node.y * TILESIZE
                 rect = pg.Rect(x, y, TILESIZE, TILESIZE)
                 pg.draw.rect(screen, CYAN, rect)
-
+            print("Path Length:" + str(counter))
             # current = start + path[g.vec2int(start)]
 
             # while current != goal:
@@ -94,7 +113,7 @@ def main():
             #     rect = pg.Rect(x, y, TILESIZE, TILESIZE)
             #     pg.draw.rect(screen, CYAN, rect)
             #     current = current + path[g.vec2int(current)]
-        
+            findPath = False
         home = pg.Rect(start.x*TILESIZE, start.y*TILESIZE, TILESIZE, TILESIZE)
         pg.draw.rect(screen, BLUE, home)
 
