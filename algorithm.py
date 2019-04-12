@@ -49,6 +49,7 @@ class Algorithms:
     def dijkstras(self):
         path = {}
         cost = {}
+        self.shortestPath = []
         frontier = PriorityQueue()
         frontier.put(self.graph.vec2int(self.start), 0)
         path[self.graph.vec2int(self.start)] = None
@@ -81,6 +82,7 @@ class Algorithms:
         visited = []
         currentOptions = [self.start]
         currentPath = []
+        self.shortestPath = []
         path = {}
         current = 0
         while current != self.end:
