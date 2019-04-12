@@ -128,12 +128,13 @@ class Algorithms:
                 break
             for next in self.graph.find_neighbors(vec(current)):
                 next = self.graph.vec2int(next)
-                next_cost = cost[current] + self.graph.cost(current, next)
+                next_cost = cost[current] + 1
                 if next not in cost or next_cost < cost[next]:
                     cost[next] = next_cost
-                    priority = next_cost + self.heuristic(end, vec(next))
+                    priority = next_cost + self.distance(next, self.end)
                     frontier.put(next, priority)
-                    path[next] = vec(current) - vec(next)
+                    path[next] = vec(current)
+        self.shortestPath = self.get_return_path(path, self.end)
         return path
 
     def BFS(self):
@@ -170,9 +171,6 @@ class Algorithms:
             new_path.append(current)
         new_path.append(self.start)
         return new_path
-        
-        
->>>>>>> 14979a3fd5c4abf938bf629fe954b2e8025cb293
 
 
 
