@@ -44,25 +44,24 @@ def main():
     filename = "test2"
     parseFile(filename)
     print(start)
+    algorithms = Algorithms(g, start, goal)
     while running:
         clock.tick(FPS)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
-            
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     running = False
-
-            if event.type == pg.KEYDOWN:
                 if event.key == pg.K_d:
-                    d = Algorithms(g, start, goal )
-                    path = d.dijkstras()
+                    path = algorithms.dijkstras()
                     findPath = True
-            if event.type == pg.KEYDOWN:
                 if event.key == pg.K_s:
-                    d = Algorithms(g, start, goal)
-                    path = d.DFS()
+                    path = algorithms.DFS()
+                    findPath = True
+                if event.key == pg.K_f:
+                    path = algorithms.BFS()
                     findPath = True
                    
         screen.fill(DARKGRAY)
@@ -78,7 +77,7 @@ def main():
 
 
         if(findPath == True):
-            for node in d.getShortestPath():
+            for node in algorithms.getShortestPath():
                 x = node.x * TILESIZE
                 y = node.y * TILESIZE
                 rect = pg.Rect(x, y, TILESIZE, TILESIZE)

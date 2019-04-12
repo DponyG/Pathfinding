@@ -1,6 +1,8 @@
 
 
 import heapq
+import queue
+
 import pygame as pg
 
 vec = pg.math.Vector2
@@ -108,6 +110,41 @@ class Algorithms:
             if beenVisited == 0:
                 unvisited.append(next)
         return unvisited
+
+    def BFS(self):
+        graph = self.graph
+        current = self.start
+        return_path = []
+        path = {}
+        search_queue = queue.Queue(0)
+        search_queue.put(current)
+        iterations = 0
+        while not search_queue.empty():
+            iterations += 1
+            current = search_queue.get()
+            if current == self.end:
+                return_path = self.get_return_path(path, current)
+                print(f"BFS path with length {len(return_path)}: {return_path}")
+                break
+            else:
+                neighbors = graph.find_neighbors(current)
+                for n in neighbors:
+                    neighbor = self.graph.vec2int(n)
+                    if neighbor not in path.keys():
+                        path[neighbor] = current
+                        search_queue.put(n)
+        self.shortestPath = return_path
+        return path
+
+    def get_return_path(self, path, end_node):
+        new_path = []
+        previous = end_node
+        while previous != self.start:
+            current = previous
+            previous = path[self.graph.vec2int(current)]
+            new_path.append(current)
+        new_path.append(self.start)
+        return new_path
         
         
 
