@@ -64,6 +64,11 @@ def main():
                     d = Algorithms(g, start, goal)
                     path = d.DFS()
                     findPath = True
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_a:
+                    d = Algorithms(g, start, goal)
+                    path = d.a_star_search()
+                    findPath = True
                    
         screen.fill(DARKGRAY)
                    

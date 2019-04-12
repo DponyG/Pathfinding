@@ -108,8 +108,31 @@ class Algorithms:
             if beenVisited == 0:
                 unvisited.append(next)
         return unvisited
-        
-        
+
+    def heuristic(self,node1, node2):
+        return abs(node1.x - node2.x) + (node1.y - node2.y)
+
+    def a_star_search(self):
+        frontier = PriorityQueue()
+        frontier.put(self.graph.vec2int(self.start), 0)
+        path = {}
+        cost = {}
+        path[self.graph.vec2int(self.start)] = None
+        cost[self.graph.vec2int(self.start)] = 0
+
+        while not frontier.empty():
+            current = frontier.get()
+            if current == self.end:
+                break
+            for next in self.graph.find_neighbors(vec(current)):
+                next = self.graph.vec2int(next)
+                next_cost = cost[current] + self.graph.cost(current, next)
+                if next not in cost or next_cost < cost[next]:
+                    cost[next] = next_cost
+                    priority = next_cost + self.heuristic(end, vec(next))
+                    frontier.put(next, priority)
+                    path[next] = vec(current) - vec(next)
+        return path
 
 
 
