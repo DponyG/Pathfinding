@@ -66,13 +66,12 @@ class Algorithms:
                 next_cost = cost[current] + self.distance(next, self.end)
     
                 if next not in cost or next_cost < cost[next]:
-                    if next_cost < minDistance:
-                        minDistance = next_cost
-                        parent[next] = current
-                        cost[next] = next_cost
-                        priority = next_cost
-                        frontier.put(next, priority)
-                        path[next] = vec(current) - vec(next)
+                    minDistance = next_cost
+                    parent[next] = current
+                    cost[next] = next_cost
+                    priority = next_cost
+                    frontier.put(next, priority)
+                    path[next] = vec(current) - vec(next)
 
         self.setShortestPath(parent, self.graph.vec2int(self.end))
         return path
