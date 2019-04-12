@@ -57,7 +57,6 @@ class Algorithms:
         parent[self.graph.vec2int(self.start)] = -1
         
         while not frontier.empty():
-            minDistance = 1000
             current = frontier.get() ## pop the first item off the queue
             if current == self.end:
                 break
@@ -66,7 +65,6 @@ class Algorithms:
                 next_cost = cost[current] + self.distance(next, self.end)
     
                 if next not in cost or next_cost < cost[next]:
-                    minDistance = next_cost
                     parent[next] = current
                     cost[next] = next_cost
                     priority = next_cost
