@@ -1,5 +1,7 @@
 import re
 import pygame as pg
+import random
+import time
 from os import path
 from variables import *
 from grid import SquareGrid
@@ -34,7 +36,40 @@ goal = vec(1, 1)
 start = vec(1, 3)
 
 
+def newMap(xSize,ySize,amountOfWalls):
+    global GRIDWIDTH,GRIDHEIGHT
+    global g,screen,WIDTH,HEIGHT
+    unknown = []
+    GRIDWIDTH = int(xSize)
+    GRIDHEIGHT = int(ySize)
+    WIDTH = TILESIZE*GRIDWIDTH
+    HEIGHT = TILESIZE*GRIDHEIGHT
+    screen = pg.display.set_mode((WIDTH, HEIGHT))
+    g = SquareGrid(GRIDWIDTH, GRIDHEIGHT, screen, WIDTH, HEIGHT)
+    g.walls = []
+    for x in range(xSize):
+        for y in range(ySize):
+            unknown.append(vec(x,y))
+    for w in range(amountOfWalls):
+        g.walls.append(unknown.pop(random.randint(0,xSize*ySize-w-1)))
+    global start, goal
+    start = unknown.pop(random.randint(0,xSize*ySize-amountOfWalls-1))
+    goal = unknown.pop(random.randint(0,xSize*ySize-amountOfWalls-2))
+    return Algorithms(g, start, goal)
 
+def printData(t,lenPath,total,timeTook):
+    if t == "DFS":
+        fh = open("DFS", "a+")
+    elif t == "BFS":
+        fh = open("BFS", "a+")
+    elif t == "A":
+        fh = open("A", "a+")
+    elif t == "D":
+        fh = open("D", "a+")
+    performance = lenPath/total
+    fh.write(str(performance) + ", " + str(timeTook) + "\n")
+    fh.close()
+    
 ## needed to display shortest path
 
 def main():
@@ -44,7 +79,10 @@ def main():
     filename = "test2"
     parseFile(filename)
     algorithms = Algorithms(g, start, goal)
-                       
+    timeTook = 0
+    filetype = ""
+    starttime = 0
+    endtime = 0
     screen.fill(DARKGRAY)
     g.draw_grid()
     g.draw_wall()
@@ -62,33 +100,51 @@ def main():
                     screen.fill(DARKGRAY)
                     g.draw_grid()
                     g.draw_wall()
+                    starttime = time.time()
                     path = algorithms.dijkstras()
+                    endtime = time.time()
+                    filetype = "D"
                     findPath = True
                 if event.key == pg.K_s:
                     print("DFS")
                     screen.fill(DARKGRAY)
                     g.draw_grid()
                     g.draw_wall()
+                    starttime = time.time()
                     path = algorithms.DFS()
+                    endtime = time.time()
+                    filetype = "DFS"
                     findPath = True
                 if event.key == pg.K_f:
                     print("BFS")
                     screen.fill(DARKGRAY)
                     g.draw_grid()
                     g.draw_wall()
+                    starttime = time.time()
                     path = algorithms.BFS()
+                    endtime = time.time()
+                    filetype = "BFS"
                     findPath = True
                 if event.key == pg.K_a:
                     print("ASTAR")
                     screen.fill(DARKGRAY)
                     g.draw_grid()
                     g.draw_wall()
+                    starttime = time.time()
                     path = algorithms.a_star_search()
+                    endtime = time.time()
+                    filetype = "A"
                     findPath = True
+                if event.key == pg.K_n:
+                    algorithms = newMap(20,20,100)
+                    screen.fill(DARKGRAY)
+                    g.draw_grid()
+                    g.draw_wall()
 
         pg.display.set_caption("{:.2f}".format(clock.get_fps()))
 
         if(findPath == True):
+            timeTook = endtime - starttime
             
             counter = 0
             for node in path:
@@ -97,6 +153,7 @@ def main():
                 pg.draw.rect(screen, MEDGRAY, rect)
                 counter += 1
             print("Nodes Searched: "+ str(counter))
+            printData(filetype,counter,GRIDHEIGHT*GRIDWIDTH,timeTook)
             counter = 0
             for node in algorithms.getShortestPath():
                 counter += 1
@@ -105,6 +162,7 @@ def main():
                 rect = pg.Rect(x, y, TILESIZE, TILESIZE)
                 pg.draw.rect(screen, CYAN, rect)
             print("Path Length:" + str(counter))
+            
             # current = start + path[g.vec2int(start)]
 
             # while current != goal:

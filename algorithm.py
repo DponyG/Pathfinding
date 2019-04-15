@@ -36,9 +36,10 @@ class Algorithms:
     
     def setShortestPath(self, parent, j):
 
+        if not j in parent:
+            return
         if parent[j] == -1:
             return
-        
         self.shortestPath.append(vec(parent[j]))
         self.setShortestPath(parent, parent[j])
 
@@ -71,7 +72,6 @@ class Algorithms:
                     priority = next_cost
                     frontier.put(next, priority)
                     path[next] = vec(current) - vec(next)
-
         self.setShortestPath(parent, self.graph.vec2int(self.end))
         return path
 
@@ -85,6 +85,8 @@ class Algorithms:
         while current != self.end:
             if not currentOptions:
                 currentPath.pop(len(currentPath) - 1)
+                if len(currentPath) == 0:
+                    return path
                 current = currentPath[len(currentPath) -1]
                 currentOptions = self.getUnvisted(current,visited)
             else:
@@ -166,6 +168,8 @@ class Algorithms:
         previous = end_node
         while previous != self.start:
             current = previous
+            if not self.graph.vec2int(current) in path:
+                return []
             previous = path[self.graph.vec2int(current)]
             new_path.append(current)
         new_path.append(self.start)
